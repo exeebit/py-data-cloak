@@ -1,32 +1,27 @@
-import pytest
-from pycloak.masking import Anonymizer
+"""Backward-compat tests against the original API."""
+from pycloak import Anonymizer
+
 
 def test_fixed_masking():
-    rules = {"secret": "fixed:hidden"}
-    anonymizer = Anonymizer(rules)
-    data = {"name": "Alice", "secret": "s3cr3t"}
-    result = anonymizer.process_record(data)
-    assert result["name"] == "Alice"
-    assert result["secret"] == "hidden"
+    a = Anonymizer({"secret": "fixed:hidden"})
+    out = a.process_record({"name": "Alice", "secret": "s3cr3t"})
+    assert out == {"name": "Alice", "secret": "hidden"}
+
 
 def test_mask_all_but_last():
-    rules = {"ssn": "mask_all_but_last_4"}
-    anonymizer = Anonymizer(rules)
-    data = {"ssn": "123-45-6789"}
-    result = anonymizer.process_record(data)
-    assert result["ssn"] == "*******6789"
+    a = Anonymizer({"ssn": "mask_all_but_last_4"})
+    out = a.process_record({"ssn": "123-45-6789"})
+    assert out["ssn"] == "*******6789"
+
 
 def test_clear():
-    rules = {"notes": "clear"}
-    anonymizer = Anonymizer(rules)
-    data = {"notes": "Top Secret"}
-    result = anonymizer.process_record(data)
-    assert result["notes"] is None
+    a = Anonymizer({"notes": "clear"})
+    out = a.process_record({"notes": "Top Secret"})
+    assert out["notes"] is None
+
 
 def test_faker():
-    rules = {"email": "faker:email"}
-    anonymizer = Anonymizer(rules, seed=42)
-    data = {"email": "real@example.com"}
-    result = anonymizer.process_record(data)
-    assert result["email"] != "real@example.com"
-    assert "@" in result["email"]
+    a = Anonymizer({"email": "faker:email"}, seed=42)
+    out = a.process_record({"email": "real@example.com"})
+    assert out["email"] != "real@example.com"
+    assert "@" in out["email"]

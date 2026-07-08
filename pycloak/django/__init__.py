@@ -1,2 +1,5 @@
+"""Django integration for py-data-cloak.
 
-default_app_config = 'pycloak.django.apps.PycloakConfig'
+Add ``'pycloak.django'`` to ``INSTALLED_APPS`` to enable the
+``dumpdata_masked`` management command.
+"""

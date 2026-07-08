@@ -1,6 +1,8 @@
 from django.apps import AppConfig
 
+
 class PycloakConfig(AppConfig):
-    name = 'pycloak.django'
-    label = 'pycloak_django'
+    name = "pycloak.django"
+    label = "pycloak_django"
     verbose_name = "PyDataCloak"
+    default_auto_field = "django.db.models.BigAutoField"
